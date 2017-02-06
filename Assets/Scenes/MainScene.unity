@@ -102,6 +102,7 @@ GameObject:
   - 114: {fileID: 56583058}
   - 92: {fileID: 56583057}
   - 124: {fileID: 56583056}
+  - 114: {fileID: 56583060}
   - 114: {fileID: 56583055}
   m_Layer: 0
   m_Name: VRCamera
@@ -200,6 +201,19 @@ Camera:
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
   m_StereoMirrorMode: 0
+--- !u!114 &56583060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 56583053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83d9b4486ddf59f40b9b9ba0b90c10ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Resolution: 1
+  DefaultSpotCookie: {fileID: 2800000, guid: 5157bf6d690b6df458f6c0ce0c06d329, type: 3}
 --- !u!1 &308620577
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,7 +537,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
+  m_Children:
+  - {fileID: 1767815350}
+  - {fileID: 1938044940}
   m_Father: {fileID: 1830154529}
   m_RootOrder: 0
 --- !u!64 &1186704445
@@ -2680,6 +2696,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1710064094}
   - 108: {fileID: 1710064095}
+  - 114: {fileID: 1710064096}
   m_Layer: 0
   m_Name: Spotlight
   m_TagString: Untagged
@@ -2699,7 +2716,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 5.2640004, y: 90.00001, z: 0}
   m_Children: []
   m_Father: {fileID: 1767815350}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!108 &1710064095
 Light:
   m_ObjectHideFlags: 0
@@ -2734,6 +2751,31 @@ Light:
   m_BounceIntensity: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &1710064096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1710064093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af73b0c656507a4418d99b65dd620bac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SampleCount: 8
+  ScatteringCoef: 0.5
+  ExtinctionCoef: 0.01
+  SkyboxExtinctionCoef: 0.9
+  MieG: 0.1
+  HeightFog: 0
+  HeightScale: 0.1
+  GroundLevel: 0
+  Noise: 0
+  NoiseScale: 0.015
+  NoiseIntensity: 1
+  NoiseIntensityOffset: 0.3
+  NoiseVelocity: {x: 3, y: 3}
+  MaxRayLength: 400
 --- !u!1 &1748837232
 GameObject:
   m_ObjectHideFlags: 0
@@ -2889,16 +2931,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1767815349}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 1768906786}
   - {fileID: 1870549262}
   - {fileID: 1710064094}
-  m_Father: {fileID: 1830154529}
-  m_RootOrder: 1
+  m_Father: {fileID: 1186704444}
+  m_RootOrder: 0
 --- !u!1 &1768906785
 GameObject:
   m_ObjectHideFlags: 0
@@ -2911,7 +2952,7 @@ GameObject:
   - 65: {fileID: 1768906788}
   - 23: {fileID: 1768906787}
   - 95: {fileID: 1768906790}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Whirlygig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2925,11 +2966,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1768906785}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.178, y: 2.59, z: 0.366}
+  m_LocalPosition: {x: -17.784796, y: 26.314312, z: -59.672237}
   m_LocalScale: {x: 0.30464986, y: 0.08837206, z: 0.30464986}
   m_LocalEulerAnglesHint: {x: 64.00001, y: 63.425255, z: 28.939264}
   m_Children: []
-  m_Father: {fileID: 1767815350}
+  m_Father: {fileID: 1938044940}
   m_RootOrder: 0
 --- !u!23 &1768906787
 MeshRenderer:
@@ -3080,6 +3121,7 @@ GameObject:
   - 4: {fileID: 1804632005}
   - 20: {fileID: 1804632003}
   - 114: {fileID: 1804632004}
+  - 114: {fileID: 1804632006}
   m_Layer: 0
   m_Name: FallbackObjects
   m_TagString: Untagged
@@ -3150,6 +3192,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1362844648}
   m_RootOrder: 0
+--- !u!114 &1804632006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1804632002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83d9b4486ddf59f40b9b9ba0b90c10ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Resolution: 1
+  DefaultSpotCookie: {fileID: 2800000, guid: 5157bf6d690b6df458f6c0ce0c06d329, type: 3}
 --- !u!1 &1830154528
 GameObject:
   m_ObjectHideFlags: 0
@@ -3177,7 +3232,6 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1186704444}
-  - {fileID: 1767815350}
   m_Father: {fileID: 0}
   m_RootOrder: 1
 --- !u!1 &1865871584
@@ -3234,8 +3288,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 1870549262}
   - 108: {fileID: 1870549263}
+  - 114: {fileID: 1870549264}
   m_Layer: 0
-  m_Name: Point light
+  m_Name: Overhead Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3253,7 +3308,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 1767815350}
-  m_RootOrder: 1
+  m_RootOrder: 0
 --- !u!108 &1870549263
 Light:
   m_ObjectHideFlags: 0
@@ -3288,6 +3343,31 @@ Light:
   m_BounceIntensity: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &1870549264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1870549261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af73b0c656507a4418d99b65dd620bac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SampleCount: 8
+  ScatteringCoef: 0.5
+  ExtinctionCoef: 0.01
+  SkyboxExtinctionCoef: 0.9
+  MieG: 0.1
+  HeightFog: 0
+  HeightScale: 0.1
+  GroundLevel: 0
+  Noise: 0
+  NoiseScale: 0.015
+  NoiseIntensity: 1
+  NoiseIntensityOffset: 0.3
+  NoiseVelocity: {x: 3, y: 3}
+  MaxRayLength: 400
 --- !u!1 &1898340760
 GameObject:
   m_ObjectHideFlags: 0
@@ -3543,6 +3623,35 @@ MonoBehaviour:
   controllerPrefab: {fileID: 168468, guid: 3f39fc63a93686e4a8e9168ee73f24d9, type: 2}
   showDebugText: 0
   spewDebugText: 0
+--- !u!1 &1938044939
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1938044940}
+  m_Layer: 0
+  m_Name: Demo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1938044940
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1938044939}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children:
+  - {fileID: 1768906786}
+  m_Father: {fileID: 1186704444}
+  m_RootOrder: 1
 --- !u!1 &2067650956
 GameObject:
   m_ObjectHideFlags: 0
