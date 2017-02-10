@@ -8,15 +8,25 @@ public class Silhouette : MonoBehaviour {
 	public GameObject LightSource;
 
 	public Vector3 TargetForward;
+	public Vector3 TargetUp;
 	public Vector3 TargetLocation;
 	private float minProximity = 0.5f;
+	public float ForwardAccuracy;
+	public float UpAccuracy;
+	public float LocationAccuracy;
 
+	float degThreshold = 10;
 	float accuracy {
 		get {
-			float angleAcc = Mathf.Clamp01(Vector3.Dot (TargetForward.normalized, transform.forward));
+			float forAcc = Mathf.Clamp01((Vector3.Dot(transform.forward,TargetForward.normalized) - Mathf.Cos(degThreshold * Mathf.Deg2Rad))/(1 - Mathf.Cos(degThreshold * Mathf.Deg2Rad)));
+			float upAcc = Mathf.Clamp01((Vector3.Dot(transform.up,TargetUp.normalized) - Mathf.Cos(degThreshold * Mathf.Deg2Rad))/(1 - Mathf.Cos(degThreshold * Mathf.Deg2Rad)));
+			//float forAcc = Mathf.Lerp(0,1 Mathf.Clamp01 (Vector3.Dot (transform.forward, TargetForward.normalized));
+			//float upAcc = Mathf.Clamp01 (Vector3.Dot (transform.up, TargetUp.normalized));
 			float locAcc = Mathf.Clamp01 ((minProximity - Vector3.Distance (transform.position, TargetLocation)) / minProximity);
-			Debug.Log (angleAcc);
-			return locAcc * angleAcc * angleAcc;
+			ForwardAccuracy = forAcc;
+			UpAccuracy = upAcc;
+			LocationAccuracy = locAcc;
+			return forAcc * upAcc * locAcc;
 		}
 	}
 

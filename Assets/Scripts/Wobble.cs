@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Wobble : MonoBehaviour {
 
-	Vector3 EPS = Random.onUnitSphere;
+	Vector3 EPS = Vector3.zero;
 	Vector3 lastEPS;
 	Vector3 nextEPS;
 	[Range (0.01f,10)]
