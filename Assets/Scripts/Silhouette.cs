@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class Silhouette : MonoBehaviour {
 	public GameObject ShadowWall;
@@ -45,11 +46,15 @@ public class Silhouette : MonoBehaviour {
 	}
 		
 	void ProjectShadow(){
-		_shadow.transform.position = transform.position;
+		float dist;
+		Ray ray = new Ray (LightSource.transform.position, transform.position - LightSource.transform.position);
+		if (Wall.Raycast (ray, out dist))
+			_shadow.transform.position = ray.GetPoint (dist);
+		//_shadow.transform.position = transform.position;
 		_shadowMesh = GetComponent<MeshFilter> ().mesh;
-		Vector3[] vertices = GetComponent<MeshFilter>().mesh.vertices;
+		Vector3[] vertices = GetComponent<MeshFilter> ().mesh.vertices.Select (p => transform.TransformPoint (p)).ToArray();
 		for (int i = 0; i < vertices.Length; i++) {
-			vertices [i] = _shadow.transform.InverseTransformPoint(ProjectPoint (transform.TransformPoint (vertices [i])));
+			vertices [i] = _shadow.transform.InverseTransformPoint(ProjectPoint (vertices [i]));
 		}
 		_shadowMesh.vertices = vertices;
 	}
