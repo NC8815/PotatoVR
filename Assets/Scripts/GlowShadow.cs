@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Valve.VR.InteractionSystem;
+using System.Linq;
 
+[RequireComponent(typeof(PuzzlePiece))]
 public class GlowShadow : MonoBehaviour {
 
 	public Color GlowColor = Color.black;
@@ -23,15 +26,22 @@ public class GlowShadow : MonoBehaviour {
 	private float upAcc;
 	private float locAcc;
 
-	float degThreshold = 10;
-	float minProximity = 0.1f;
+	float degThreshold = 20;
+	float minProximity = 1f;
+
+	float accuracyThreshold = 0.9f;
+
+	float lastGlow = 0;
+
+	bool isHeld = false;
+	Hand holdingHand;
 
 	public float accuracy {
 		get {
 			forAcc = Mathf.Clamp01((Vector3.Dot(transform.forward.normalized,TargetForward.normalized) - Mathf.Cos(degThreshold * Mathf.Deg2Rad))/(1 - Mathf.Cos(degThreshold * Mathf.Deg2Rad)));
 			upAcc = Mathf.Clamp01((Vector3.Dot(transform.up.normalized,TargetUp.normalized) - Mathf.Cos(degThreshold * Mathf.Deg2Rad))/(1 - Mathf.Cos(degThreshold * Mathf.Deg2Rad)));
 			locAcc = Mathf.Clamp01 ((minProximity - Vector3.Distance (transform.position, TargetLocation)) / minProximity);
-			return forAcc * upAcc * locAcc;
+			return forAcc * forAcc * upAcc * upAcc * locAcc;
 		}
 	}
 
@@ -45,27 +55,58 @@ public class GlowShadow : MonoBehaviour {
 		foreach (var renderer in GetComponentsInChildren<Renderer>()) {
 			_materials.AddRange (renderer.materials);
 		}
-		EventManager.StartListening("SpawnNextPiece",ProgressPuzzle);
+		//EventManager.StartListening("SpawnNextPiece",ProgressPuzzle);
+		GetComponent<PuzzlePiece>().AddListeners();
+	}
+
+	void HapticFeedback(float acc){
+		if (lastGlow < acc) {
+			if (holdingHand != null && holdingHand.controller != null)
+				holdingHand.controller.TriggerHapticPulse (500);
+		} else {
+			if (holdingHand != null && holdingHand.controller != null)
+				holdingHand.controller.TriggerHapticPulse (3000);
+		}
+		lastGlow = acc;
+	}
+
+	void UpdateGlow ()
+	{
+		_targetColor = Color.Lerp (Color.black, GlowColor, GlowIntensity);
+		if (_currentColor != _targetColor) {
+			_currentColor = Color.Lerp (_currentColor, _targetColor, Time.deltaTime * LerpFactor);
+			for (int i = 0; i < _materials.Count; i++) {
+				_materials [i].SetColor ("_GlowColor", _currentColor);
+			}
+		}
+
+		lastGlow = GlowIntensity;
 	}
 
 	void Update(){
 		GlowIntensity = accuracy;
-		if (accuracy < 0.95f) {
-			_targetColor = Color.Lerp (Color.black, GlowColor, GlowIntensity);
-			_currentColor = Color.Lerp (_currentColor, _targetColor, Time.deltaTime * LerpFactor);
-
-			for (int i = 0; i < _materials.Count; i++) {
-				_materials [i].SetColor ("_GlowColor", _currentColor);
-			}
+		if (isHeld)
+			HapticFeedback (GlowIntensity);
+		if (accuracy < accuracyThreshold) {
+			GlowIntensity = accuracy;
+			UpdateGlow ();
 		} else {
-			EventManager.TriggerEvent ("SpawnNextPiece");
+			GlowIntensity = 1;
+			UpdateGlow ();
 		}
 	}
-
-	public void ProgressPuzzle(){
-		Instantiate (Resources.Load<GameObject> ("Prefabs/DemoCube"));
-		Destroy (transform.parent.gameObject);
-		EventManager.StopListening ("SpawnNextPiece", ProgressPuzzle);
+		
+	private void HandAttachedUpdate(){
+		Update ();
 	}
 
+	public void OnHold(Hand hand){
+		isHeld = true;
+		holdingHand = hand;
+	}
+
+	public void OnDrop(Hand hand){
+		isHeld = false;
+		holdingHand = null;
+	}
 }

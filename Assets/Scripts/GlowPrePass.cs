@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEditor;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(Camera))]
@@ -22,6 +23,11 @@ public class GlowPrePass : MonoBehaviour
 
 	private Camera _camera {get { return GetComponent<Camera>();}}
 	private Projector _projector {get { return GetComponent<Projector>(); }}
+
+//	[HideInInspector]
+//	public string SnapshotPath;
+
+//	public byte[] ScreenShot;
 
 	void OnEnable()
 	{
@@ -54,7 +60,6 @@ public class GlowPrePass : MonoBehaviour
 		_camera.aspect = 1;
 		_projector.aspectRatio = _camera.aspect;
 		_projector.material.SetTexture ("_ShadowTex", _camera.targetTexture);
-		Debug.Log (_projector.material.name);
 	}
 
 	void OnRenderImage(RenderTexture src, RenderTexture dst)
@@ -68,13 +73,10 @@ public class GlowPrePass : MonoBehaviour
 
 		Graphics.Blit (src, Border);
 
-//		for (int i = 0; i < 1; i++)
-//		{
-			var temp = RenderTexture.GetTemporary(Border.width, Border.height);
-			Graphics.Blit(Border, temp, _bordMat, 0);
-			Graphics.Blit(temp, Border, _bordMat, 1);
-			RenderTexture.ReleaseTemporary(temp);
-//		}
+		var temp = RenderTexture.GetTemporary(Border.width, Border.height);
+		Graphics.Blit(Border, temp, _bordMat, 0);
+		Graphics.Blit(temp, Border, _bordMat, 1);
+		RenderTexture.ReleaseTemporary(temp);
 
 		Graphics.Blit (src, dst, _compositeMat, 0);
 
@@ -83,7 +85,7 @@ public class GlowPrePass : MonoBehaviour
 
 		Graphics.Blit(dst, Blurred);
 		
-		for (int i = 0; i < 1; i++)
+		for (int i = 0; i < 2; i++)
 		{
 			temp = RenderTexture.GetTemporary(Blurred.width, Blurred.height);
 			Graphics.Blit(Blurred, temp, _blurMat, 0);
@@ -92,6 +94,5 @@ public class GlowPrePass : MonoBehaviour
 		}
 
 		Graphics.Blit (src, dst, _compositeMat,1);
-		//*/
 	}
 }

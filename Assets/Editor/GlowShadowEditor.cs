@@ -13,6 +13,7 @@ public class GlowShadowEditor : Editor {
 		EditorGUILayout.FloatField ("Accuracy:", current.accuracy);
 		if (GUILayout.Button ("Set")) {
 			current.SetTarget (current.transform.forward,current.transform.up,current.transform.position);
+			//current.SetFlatMesh();
 		}
 		if (GUI.changed)
 			EditorUtility.SetDirty (current);
