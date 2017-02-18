@@ -31,6 +31,9 @@ public class GlowShadow : MonoBehaviour {
 
 	float accuracyThreshold = 0.9f;
 
+	public int strongPulse = 3000;
+	public int weakPulse = 100;
+
 	float lastGlow = 0;
 
 	bool isHeld = false;
@@ -41,7 +44,7 @@ public class GlowShadow : MonoBehaviour {
 			forAcc = Mathf.Clamp01((Vector3.Dot(transform.forward.normalized,TargetForward.normalized) - Mathf.Cos(degThreshold * Mathf.Deg2Rad))/(1 - Mathf.Cos(degThreshold * Mathf.Deg2Rad)));
 			upAcc = Mathf.Clamp01((Vector3.Dot(transform.up.normalized,TargetUp.normalized) - Mathf.Cos(degThreshold * Mathf.Deg2Rad))/(1 - Mathf.Cos(degThreshold * Mathf.Deg2Rad)));
 			locAcc = Mathf.Clamp01 ((minProximity - Vector3.Distance (transform.position, TargetLocation)) / minProximity);
-			return forAcc * forAcc * upAcc * upAcc * locAcc;
+			return Mathf.Sqrt(locAcc) * forAcc * forAcc * upAcc * upAcc;
 		}
 	}
 
@@ -60,13 +63,15 @@ public class GlowShadow : MonoBehaviour {
 	}
 
 	void HapticFeedback(float acc){
-		if (lastGlow < acc) {
-			if (holdingHand != null && holdingHand.controller != null)
-				holdingHand.controller.TriggerHapticPulse (500);
-		} else {
-			if (holdingHand != null && holdingHand.controller != null)
-				holdingHand.controller.TriggerHapticPulse (3000);
-		}
+//		if (lastGlow < acc) {
+//			if (holdingHand != null && holdingHand.controller != null)
+//				holdingHand.controller.TriggerHapticPulse ((ushort)weakPulse);
+//		} else {
+//			if (holdingHand != null && holdingHand.controller != null)
+//				holdingHand.controller.TriggerHapticPulse ((ushort)strongPulse);
+//		}
+		if (holdingHand != null && holdingHand.controller != null)
+			holdingHand.controller.TriggerHapticPulse ((ushort)Mathf.Clamp (acc * strongPulse, 0, 3999));
 		lastGlow = acc;
 	}
 
