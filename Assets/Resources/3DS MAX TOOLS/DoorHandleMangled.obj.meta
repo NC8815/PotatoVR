@@ -1,17 +1,17 @@
 fileFormatVersion: 2
-guid: 3a121d11883524a42b3802b3802179e7
-timeCreated: 1487362858
+guid: 2e72ac69db5b72942b702245bf3c9902
+timeCreated: 1487459408
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: Door_Handle
+    100000: Cylinder001
     100002: //RootNode
-    400000: Door_Handle
+    400000: Cylinder001
     400002: //RootNode
-    2300000: Door_Handle
-    3300000: Door_Handle
-    4300000: Door_Handle
+    2300000: Cylinder001
+    3300000: Cylinder001
+    4300000: Cylinder001
   materials:
     importMaterials: 1
     materialName: 0
@@ -72,7 +72,7 @@ ModelImporter:
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
-    skeletonHasParents: 0
+    skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 0
   humanoidOversampling: 1

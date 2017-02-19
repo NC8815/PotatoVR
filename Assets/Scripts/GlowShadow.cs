@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Valve.VR.InteractionSystem;
 using System.Linq;
 
-[RequireComponent(typeof(PuzzlePiece))]
+//[RequireComponent(typeof(PuzzlePiece))]
 public class GlowShadow : MonoBehaviour {
 
 	public Color GlowColor = Color.black;
@@ -29,7 +29,8 @@ public class GlowShadow : MonoBehaviour {
 	float degThreshold = 20;
 	float minProximity = 1f;
 
-	float accuracyThreshold = 0.9f;
+	[SerializeField]
+	float accuracyThreshold = 0.6f;
 
 	public int strongPulse = 3000;
 	public int weakPulse = 100;
@@ -38,6 +39,8 @@ public class GlowShadow : MonoBehaviour {
 
 	bool isHeld = false;
 	Hand holdingHand;
+
+	PuzzlePiece puzzle { get { return GetComponent<PuzzlePiece> (); } }
 
 	public float accuracy {
 		get {
@@ -59,7 +62,8 @@ public class GlowShadow : MonoBehaviour {
 			_materials.AddRange (renderer.materials);
 		}
 		//EventManager.StartListening("SpawnNextPiece",ProgressPuzzle);
-		GetComponent<PuzzlePiece>().AddListeners();
+		if(puzzle != null)
+			puzzle.AddListeners();
 	}
 
 	void HapticFeedback(float acc){
@@ -98,6 +102,8 @@ public class GlowShadow : MonoBehaviour {
 		} else {
 			GlowIntensity = 1;
 			UpdateGlow ();
+			if (puzzle != null)
+				puzzle.ProgressPuzzle ();
 		}
 	}
 		
