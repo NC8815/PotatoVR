@@ -30,7 +30,7 @@ GameObject:
   - component: {fileID: 33493274587579034}
   - component: {fileID: 114850707099746534}
   - component: {fileID: 23681052546820922}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HandleMangled
   m_TagString: Untagged
   m_Icon: {fileID: 0}

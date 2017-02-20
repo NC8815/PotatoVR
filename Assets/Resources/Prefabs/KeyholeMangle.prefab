@@ -30,7 +30,7 @@ GameObject:
   - component: {fileID: 33907939472911316}
   - component: {fileID: 114423856327074260}
   - component: {fileID: 23375685569209112}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: KeyholeMangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
