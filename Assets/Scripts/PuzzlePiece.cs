@@ -33,7 +33,8 @@ public class PuzzlePiece : MonoBehaviour {
 		for (int i = 0; i < spawns.Length; i++) {
 			Instantiate (spawns [i]);
 		}
-		Destroy (transform.parent.gameObject);
+//		Destroy (transform.parent.gameObject);
+		Destroy (gameObject);
 		if(hint!= null)
 			Destroy (hint);
 	}
