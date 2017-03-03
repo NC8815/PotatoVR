@@ -6,6 +6,7 @@ public class SpawnEvent : MonoBehaviour {
 
 	public GameObject shadowObject;
 
+
 	private UnityAction someListener;
 
 	void Awake ()
@@ -28,10 +29,13 @@ public class SpawnEvent : MonoBehaviour {
 		if (Input.GetKeyDown ("o")) {
 			EventManager.TriggerEvent ("Spawn");
 		}
+
 	}
 		
 	void SpawnShadow ()
 	{
 		Instantiate (shadowObject, transform.position, Quaternion.identity);
 	}
+
+
 }
