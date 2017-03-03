@@ -33,10 +33,10 @@ public class AudioController : MonoBehaviour
 	public void PlaySingle(AudioSource source, AudioClip clip)
 	{
 		//Set the clip of our efxSource audio source to the clip passed in as a parameter.
-		efxSource.clip = clip;
+		source.clip = clip;
 
 		//Play the clip.	
-		efxSource.Play ();
+		source.Play ();
 	}
 
 
