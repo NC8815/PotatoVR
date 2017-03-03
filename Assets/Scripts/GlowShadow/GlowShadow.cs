@@ -17,51 +17,42 @@ public class GlowShadow : MonoBehaviour {
 	private Color _currentColor;
 	private Color _targetColor;
 
-//	public Vector3 TargetForward;
-//	public Vector3 TargetUp;
-//	public Vector3 TargetLocation;
-
 	public Texture2D TargetShadow;
 	Color32[] _targetShadow;
 
-//	private float forAcc;
-//	private float upAcc;
-//	private float locAcc;
-
-//	float degThreshold = 20;
-//	float minProximity = 1f;
+	[SerializeField]
+	float accuracyTarget = 0.95f;
 
 	[SerializeField]
-	float accuracyThreshold = 0.95f;
+	[Range(0,0.99f)]
+	float minimumAccuracy = 0.0f;
 
 	[Range(1,3999)]
 	[SerializeField]
 	int pulseStrength = 3000;
-//	int weakPulse = 100;
 
-//	float lastGlow = 0;
+//	[SerializeField]
+//	float ACC;
 
-	//bool isHeld = false;
+	bool done = false;
+
 	public Hand holdingHand { get; private set; }
 
 	public GameObject LightSource;
 
-	//Utility variables
 	public ShadowSample Sampler;
 
-	private bool animating = false;
+//	private bool animating = false;
 
 	PuzzlePiece puzzle { get { return GetComponent<PuzzlePiece> (); } }
 
 	public float accuracy {
 		get {
-//			forAcc = Mathf.Clamp01((Vector3.Dot(transform.forward.normalized,TargetForward.normalized) - Mathf.Cos(degThreshold * Mathf.Deg2Rad))/(1 - Mathf.Cos(degThreshold * Mathf.Deg2Rad)));
-//			upAcc = Mathf.Clamp01((Vector3.Dot(transform.up.normalized,TargetUp.normalized) - Mathf.Cos(degThreshold * Mathf.Deg2Rad))/(1 - Mathf.Cos(degThreshold * Mathf.Deg2Rad)));
-//			locAcc = Mathf.Clamp01 ((minProximity - Vector3.Distance (transform.position, TargetLocation)) / minProximity);
-//			return Mathf.Sqrt(locAcc) * forAcc * forAcc * upAcc * upAcc;
-			float angularAccuracy = LightSource == null ? 1 : Vector3.Dot(LightSource.transform.forward,(transform.position - LightSource.transform.position).normalized);
-			return _targetShadow == null ? 0 : ShadowSample.CurrentImage.Compare(_targetShadow) * angularAccuracy * angularAccuracy;
-
+			//float angularAccuracy = LightSource == null ? 1 : Vector3.Dot(LightSource.transform.forward,(transform.position - LightSource.transform.position).normalized);
+			float angularOffset = Vector3.Angle(LightSource.transform.forward,transform.position - LightSource.transform.position);
+			float angularAccuracy = Mathf.Clamp01 ((LightSource.GetComponent<Light> ().spotAngle - 2 * angularOffset) / LightSource.GetComponent<Light> ().spotAngle);
+//			ACC = angularOffset;
+			return _targetShadow == null ? 0 : ShadowSample.CurrentImage.Compare (_targetShadow);// * angularAccuracy * angularAccuracy;
 		}
 	}
 
@@ -72,6 +63,10 @@ public class GlowShadow : MonoBehaviour {
 		if(puzzle != null)
 			puzzle.AddListeners();
 	}
+
+//	void Start(){
+//		AudioController.instance.PlaySingle (SpawnClip,GetComponent<AudioSource>());
+//	}
 
 	void HapticFeedback(float acc){
 		if (holdingHand != null && holdingHand.controller != null)
@@ -90,40 +85,33 @@ public class GlowShadow : MonoBehaviour {
 	}
 
 	void Update(){
-		GlowIntensity = accuracy;
-		if (!animating) {
-			if (accuracy > accuracyThreshold)
-				StartCoroutine (Despawn());
-			else
-				UpdateGlow ();
-		};
-	}
-
-	public void UpdateShadow(){
-		_targetShadow = TargetShadow.GetPixels32 ();
-	}
-
-	private void HandAttachedUpdate(){
-		GlowIntensity = accuracy;
-		HapticFeedback (GlowIntensity);
-
+		GlowIntensity = (accuracy - minimumAccuracy)/(1 - minimumAccuracy);
+		UpdateGlow ();
+		if (accuracy > accuracyTarget && !done) {
+			StartCoroutine (Despawn ());
+			done = true;
+		}
 //		if (!animating) {
 //			if (accuracy > accuracyThreshold)
 //				StartCoroutine (Despawn());
 //			else
 //				UpdateGlow ();
-//		}
+//		};
 	}
 
 	IEnumerator Despawn(){
-		animating = true;
-		holdingHand.DetachObject (gameObject);
-		enabled = false;
+		//animating = true;
 		GlowIntensity = 1;
+
+		if(holdingHand != null)
+			holdingHand.DetachObject (gameObject); //Drop the object
+		enabled = false; //Don't update anymore
+
 		while (_currentColor != GlowColor) {
 			UpdateGlow ();
 			yield return null;
 		}
+
 		puzzle.ProgressPuzzle ();
 	}
 
@@ -131,14 +119,23 @@ public class GlowShadow : MonoBehaviour {
 		puzzle.RemoveListeners ();
 	}
 
+	//SteamVR Functions
 	public void OnHold(Hand hand){
-		//isHeld = true;
 		enabled = true;
 		holdingHand = hand;
 	}
 
 	public void OnDrop(Hand hand){
-		//isHeld = false;
 		holdingHand = null;
+	}
+
+	private void HandAttachedUpdate(){
+		GlowIntensity = accuracy;
+		HapticFeedback (GlowIntensity);
+	}
+		
+	//Editor Functions
+	public void UpdateShadow(){
+		_targetShadow = TargetShadow.GetPixels32 ();
 	}
 }

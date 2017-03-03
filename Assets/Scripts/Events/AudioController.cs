@@ -30,7 +30,7 @@ public class AudioController : MonoBehaviour
 
 
 	//Used to play single sound clips.
-	public void PlaySingle(AudioSource source, AudioClip clip)
+	public void PlaySingle( AudioClip clip, AudioSource source)
 	{
 		//Set the clip of our efxSource audio source to the clip passed in as a parameter.
 		source.clip = clip;

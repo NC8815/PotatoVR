@@ -4,13 +4,8 @@ using Valve.VR.InteractionSystem;
 
 public class PuzzlePiece : MonoBehaviour {
 
-	public GameObject hint;
+//	public GameObject hint;
 	public GameObject[] spawns;
-
-	void Start(){
-		if (hint != null)
-			hint = Instantiate (hint);
-	}
 
 	public virtual void AddListeners(){
 		EventManager.StartListening ("ProgressPuzzle", ProgressPuzzle);
@@ -32,18 +27,18 @@ public class PuzzlePiece : MonoBehaviour {
 		//EventManager.StopListening ("ProgressPuzzle", ProgressPuzzle);
 		for (int i = 0; i < spawns.Length; i++) {
 			GameObject go = Instantiate (spawns [i]);
-			if (i == 0) {
+			if (go.GetComponent<GlowShadow>() != null) {
 				go.GetComponent<GlowShadow> ().Sampler = GetComponent<GlowShadow> ().Sampler;
+				go.GetComponent<GlowShadow> ().LightSource = GetComponent<GlowShadow> ().LightSource;
 				GetComponent<GlowShadow> ().Sampler.Target = go;
 			}
 		}
-		//GetComponent<GlowShadow> ().holdingHand.DetachObject (gameObject);
-		if(hint!= null)
-			Destroy (hint);
+
 		Destroy (gameObject);
 	}
 
 	void OnDestroy(){
+		Debug.Log ("DESTROYING");
 		RemoveListeners ();
 	}
 }

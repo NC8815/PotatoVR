@@ -14,7 +14,7 @@ public class SFXEvent : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.P)) {
-			PlaySound ();
+			//PlaySound ();
 		}
 	}
 
@@ -24,6 +24,7 @@ public class SFXEvent : MonoBehaviour {
 
 	public void PlaySound()
 	{
-		AudioController.instance.PlaySingle (audioSource, collisionSfx);
+		if (!audioSource.isPlaying)
+			AudioController.instance.PlaySingle (collisionSfx,audioSource);
 	}
 }
